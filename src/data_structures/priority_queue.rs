@@ -59,7 +59,7 @@ mod tests {
     }
 
     #[test]
-    fn single_item_priority_queue() {
+    fn priority_queue() {
         let mut pq = PriorityQueue::<i32, i32>::new();
         pq.insert(0, 15);
         assert_eq!(pq.is_empty(), false);
