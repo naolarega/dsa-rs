@@ -3,7 +3,7 @@ pub struct InsertionSort;
 impl InsertionSort {
     fn sort<T>(list: &mut [T])
     where
-        T: PartialOrd + Copy
+        T: PartialOrd + Copy,
     {
         for i in 1..list.len() {
             let x = list[i];
@@ -22,17 +22,23 @@ mod tests {
     use super::InsertionSort;
 
     #[test]
-    fn test_insertion_sort() {
+    fn empty() {
         let mut some_list: [i32; 0] = [];
         InsertionSort::sort(&mut some_list);
         assert_eq!(some_list, []);
+    }
 
+    #[test]
+    fn single_item() {
         let mut some_list = [2];
         InsertionSort::sort(&mut some_list);
         assert_eq!(some_list, [2]);
-        
+    }
+
+    #[test]
+    fn shuffled_items() {
         let mut some_list = [1, 4, 7, 2, 9, 0, 3];
         InsertionSort::sort(&mut some_list);
         assert_eq!(some_list, [0, 1, 2, 3, 4, 7, 9]);
     }
-}   
+}

@@ -1,2 +1,2 @@
-pub mod insertion_sort;
-pub mod quick_sort;
+pub mod algorithms;
+pub mod data_structures;
