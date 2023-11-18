@@ -1,18 +1,20 @@
-pub struct PriorityQueue<T>
+pub struct PriorityQueue<K, V>
 where
-    T: Copy,
+    K: Ord,
+    V: Copy,
 {
-    entries: Vec<Entry<T>>,
+    entries: Vec<Entry<K, V>>,
 }
 
-struct Entry<T> {
-    priority: i32,
-    item: T,
+struct Entry<K, V> {
+    priority: K,
+    item: V,
 }
 
-impl<T> PriorityQueue<T>
+impl<K, V> PriorityQueue<K, V>
 where
-    T: Copy,
+    K: Ord,
+    V: Copy,
 {
     pub fn new() -> Self {
         Self {
@@ -20,23 +22,20 @@ where
         }
     }
 
-    pub fn insert(&mut self, priority: i32, item: T) {
+    pub fn insert(&mut self, priority: K, item: V) {
         self.entries.push(Entry { priority, item });
         self.entries.sort_by(|a, b| a.priority.cmp(&b.priority));
     }
 
-    pub fn remove_min(&mut self) -> Option<T> {
-        if let Some(item) = self.entries.pop() {
-            return Some(item.item);
-        }
-        None
+    pub fn remove_min(&mut self) -> V {
+        self.entries.remove(0).item
     }
 
-    pub fn min(&self) -> Option<T> {
-        if let Some(item) = self.entries.last() {
-            return Some(item.item.clone());
+    pub fn min(&self) -> V {
+        if let Some(item) = self.entries.first() {
+            return item.item.clone();
         }
-        None
+        panic!("Priority queue is empty");
     }
 
     pub fn size(&self) -> usize {
@@ -45,5 +44,31 @@ where
 
     pub fn is_empty(&self) -> bool {
         self.entries.is_empty()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn empty_priority_queue() {
+        let pq = PriorityQueue::<i32, i32>::new();
+        assert_eq!(pq.is_empty(), true);
+        assert_eq!(pq.size(), 0);
+    }
+
+    #[test]
+    fn single_item_priority_queue() {
+        let mut pq = PriorityQueue::<i32, i32>::new();
+        pq.insert(0, 15);
+        assert_eq!(pq.is_empty(), false);
+        assert_eq!(pq.size(), 1);
+        assert_eq!(pq.min(), 15);
+        assert_eq!(pq.is_empty(), false);
+        assert_eq!(pq.size(), 1);
+        assert_eq!(pq.remove_min(), 15);
+        assert_eq!(pq.is_empty(), true);
+        assert_eq!(pq.size(), 0);
     }
 }
